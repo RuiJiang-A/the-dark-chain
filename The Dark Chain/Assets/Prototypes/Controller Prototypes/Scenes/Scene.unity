@@ -782,7 +782,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_range: 5
-  m_player: {fileID: 874310185}
+  m_player: {fileID: 1916011851}
   m_display: {fileID: 326436862}
 --- !u!1 &784654336
 GameObject:
@@ -970,7 +970,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_accelerationForce: 2500
   m_maxVelocity: 10
-  m_moveDirection: {x: 0, y: 0, z: 0}
   m_animator: {fileID: 691441897}
   m_rigidbody: {fileID: 874310188}
   m_rotation: {fileID: 1916011851}

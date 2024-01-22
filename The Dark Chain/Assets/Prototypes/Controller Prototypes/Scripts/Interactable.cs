@@ -16,10 +16,17 @@ public class Interactable : MonoBehaviour
     {
         Vector3 toPlayer = m_player.position - transform.position;
         float distance = toPlayer.magnitude;
-        float dot = Vector3.Dot(transform.forward, toPlayer);
+        float dotToPlayer = Vector3.Dot(transform.forward, toPlayer);
 
-        bool playerInRange = distance < m_range && dot < 0.0f;
-        // Debug.Log("Player in Range, pop up Interact UI");
+        Vector3 toObserver = -toPlayer;
+        float dotFromPlayer = Vector3.Dot(m_player.forward, toObserver.normalized);
+        
+        // Player is in range,
+        // observer is facing the player,
+        // and the player is not facing away from the observer
+        bool playerInRange = distance < m_range &&
+                             dotToPlayer < 0.0f &&
+                             dotFromPlayer > 0.0f;
 
         m_display.text = playerInRange
             ? "<color=\"green\">Can be seen by Player"
