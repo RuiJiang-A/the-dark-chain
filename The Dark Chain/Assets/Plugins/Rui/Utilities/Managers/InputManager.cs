@@ -4,6 +4,15 @@ namespace Boopoo.Utilities
 {
     public static class InputManager
     {
+        public static float GetHorizontalInput()
+        {
+            return Input.GetAxisRaw("Horizontal");
+        }
+        public static float GetVerticalInput()
+        {
+            return Input.GetAxisRaw("Vertical");
+        }
+
         public static Vector3 GetDirectionalInputRaw()
         {
             float horizontal = Input.GetAxisRaw("Horizontal");
