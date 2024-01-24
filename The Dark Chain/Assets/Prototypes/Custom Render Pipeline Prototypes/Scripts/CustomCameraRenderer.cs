@@ -14,7 +14,8 @@ namespace Prototype
 
         private static ShaderTagId unlitShaderTagId = new("SRPDefaultUnlit");
 
-        public void Render(ScriptableRenderContext context, Camera camera)
+        public void Render(ScriptableRenderContext context, Camera camera,
+            bool useDynamicBatching, bool useGPUInstancing)
         {
             m_context = context;
             m_camera = camera;
@@ -24,7 +25,7 @@ namespace Prototype
             if (!Culled()) return;
 
             Begin();
-            OnRender();
+            OnRender(useDynamicBatching, useGPUInstancing);
             DrawGizmos();
             Flush();
         }
@@ -70,17 +71,20 @@ namespace Prototype
             return true;
         }
 
-        protected void OnRender()
+        protected void OnRender(bool useDynamicBatching, bool useGPUInstancing)
         {
-            DrawGeometry();
+            DrawGeometry(useDynamicBatching, useGPUInstancing);
         }
 
-        private void DrawGeometry()
+        private void DrawGeometry(bool useDynamicBatching, bool useGPUInstancing)
         {
             var sortingSettings = new SortingSettings(m_camera);
             sortingSettings.criteria = SortingCriteria.CommonOpaque;
 
             var drawingSettings = new DrawingSettings(unlitShaderTagId, sortingSettings);
+            drawingSettings.enableInstancing = useGPUInstancing;
+            drawingSettings.enableDynamicBatching = useDynamicBatching;
+
             var filteringSettings = new FilteringSettings(RenderQueueRange.opaque);
             m_context.DrawRenderers(m_cullingResults, ref drawingSettings, ref filteringSettings);
 
