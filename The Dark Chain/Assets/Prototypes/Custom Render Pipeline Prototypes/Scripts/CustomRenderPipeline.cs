@@ -5,8 +5,12 @@ namespace Prototype
 {
     public class CustomRenderPipeline : RenderPipeline
     {
-        private CustomCameraRenderer m_renderer = new();
+        public CustomRenderPipeline()
+        {
+            GraphicsSettings.useScriptableRenderPipelineBatching = true;
+        }
 
+        private CustomCameraRenderer m_renderer = new();
         protected override void Render(ScriptableRenderContext context, Camera[] cameras)
         {
             foreach (Camera camera in cameras)
