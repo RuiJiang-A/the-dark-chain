@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    /// <summary>
-    /// acceleration force
-    /// </summary>
-    [Header("Settings")] [SerializeField] private float m_accelerationForce = 1200f;
-
-    /// <summary>
-    /// Velocity constraint
-    /// </summary>
-    [SerializeField] private float m_maxVelocity = 10.0f;
+    [Header("Settings")] [SerializeField] private float m_speed = 14.0f;
+    [Range(0.01f, 0.99f)] [SerializeField] private float m_movementThreshold = 0.01f;
+    [SerializeField] private float m_speedUpTime = 0.2f;
+    [SerializeField] private float m_speedDownTime = 0.1f;
+    private Vector3 m_currentVelocity = Vector3.zero;
 
     /// <summary>
     /// desire move direction
@@ -58,12 +54,13 @@ public class PlayerController : MonoBehaviour
     [UsedImplicitly]
     private void FixedUpdate()
     {
-        m_rigidbody.AddForce(m_moveDirection * m_accelerationForce);
+        Vector3 input = InputManager.GetDirectionalInput();
 
-        Vector3 currentVelocity = m_rigidbody.velocity;
-
-        if (currentVelocity.sqrMagnitude > m_maxVelocity * m_maxVelocity)
-            m_rigidbody.velocity = currentVelocity.normalized * m_maxVelocity;
+        m_rigidbody.velocity = input.magnitude > m_movementThreshold
+            ? Vector3.SmoothDamp(m_rigidbody.velocity, m_moveDirection * m_speed, ref m_currentVelocity,
+                m_speedUpTime * Time.fixedDeltaTime)
+            : Vector3.SmoothDamp(m_rigidbody.velocity, Vector3.zero, ref m_currentVelocity,
+                m_speedDownTime * Time.fixedDeltaTime);
     }
 
     private void MovePlayerRelativeToCamera()

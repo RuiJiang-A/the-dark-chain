@@ -225,7 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a6b00fcf518bb94a90b408492e07b44, type: 3}
   m_Name: FilmGrain
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   type:
     m_OverrideState: 1
     m_Value: 3
@@ -257,76 +257,6 @@ MonoBehaviour:
   tint:
     m_OverrideState: 0
     m_Value: 0
---- !u!114 &-1271254505721282648
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f086a068d4c5889438831b3ae9afc11c, type: 3}
-  m_Name: Tonemapping
-  m_EditorClassIdentifier: 
-  active: 1
-  mode:
-    m_OverrideState: 1
-    m_Value: 2
-  useFullACES:
-    m_OverrideState: 0
-    m_Value: 0
-  toeStrength:
-    m_OverrideState: 0
-    m_Value: 0
-  toeLength:
-    m_OverrideState: 0
-    m_Value: 0.5
-  shoulderStrength:
-    m_OverrideState: 0
-    m_Value: 0
-  shoulderLength:
-    m_OverrideState: 0
-    m_Value: 0.5
-  shoulderAngle:
-    m_OverrideState: 0
-    m_Value: 0
-  gamma:
-    m_OverrideState: 0
-    m_Value: 1
-  lutTexture:
-    m_OverrideState: 1
-    m_Value: {fileID: 0}
-  lutContribution:
-    m_OverrideState: 0
-    m_Value: 1
-  neutralHDRRangeReductionMode:
-    m_OverrideState: 0
-    m_Value: 2
-  acesPreset:
-    m_OverrideState: 0
-    m_Value: 3
-  fallbackMode:
-    m_OverrideState: 0
-    m_Value: 1
-  hueShiftAmount:
-    m_OverrideState: 0
-    m_Value: 0
-  detectPaperWhite:
-    m_OverrideState: 0
-    m_Value: 0
-  paperWhite:
-    m_OverrideState: 0
-    m_Value: 300
-  detectBrightnessLimits:
-    m_OverrideState: 0
-    m_Value: 1
-  minNits:
-    m_OverrideState: 0
-    m_Value: 0.005
-  maxNits:
-    m_OverrideState: 0
-    m_Value: 1000
 --- !u!114 &-1243977060766008514
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -339,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9008a067f4d626c4d8bc4bc48f04bb89, type: 3}
   m_Name: ScreenSpaceAmbientOcclusion
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 0
     m_Value: 1
@@ -429,7 +359,6 @@ MonoBehaviour:
   - {fileID: -1779979616396599179}
   - {fileID: -2842190159958583005}
   - {fileID: 1595739770980568317}
-  - {fileID: -1271254505721282648}
 --- !u!114 &1054692447091849424
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -442,7 +371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa3b8214f75b354e9ba2caadd022259, type: 3}
   m_Name: DepthOfField
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 1
     m_Value: 1
@@ -549,7 +478,7 @@ MonoBehaviour:
     m_Value: {fileID: 0}
     dimension: 2
   cloudControl:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   m_CloudPreset:
     m_OverrideState: 1
@@ -688,7 +617,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   scatteringTint:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {r: 0, g: 0, b: 0, a: 1}
   powderEffectIntensity:
     m_OverrideState: 0
@@ -718,23 +647,23 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1
   ambientLightProbeDimmer:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
   sunLightDimmer:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
   erosionOcclusion:
     m_OverrideState: 0
     m_Value: 0.1
   globalWindSpeed:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value:
       mode: 1
       customValue: 100
       additiveValue: 0
       multiplyValue: 1
   orientation:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value:
       mode: 1
       customValue: 0
@@ -759,7 +688,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   temporalAccumulationFactor:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.95
   ghostingReduction:
     m_OverrideState: 0
@@ -813,7 +742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953beb541740ddc499d005ee80c9ff29, type: 3}
   m_Name: Fog
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 0
     m_Value: 1

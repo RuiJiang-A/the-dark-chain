@@ -16,6 +16,7 @@ namespace Boopoo.Utilities
         private void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false; 
         }
 
         [UsedImplicitly]
