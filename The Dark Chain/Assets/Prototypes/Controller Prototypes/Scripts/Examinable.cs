@@ -65,8 +65,11 @@ public class Examinable : MonoBehaviour
         Vector3 cameraPosition = transform.position + m_offset;
         m_camera.transform.position = cameraPosition;
 
+        Vector3 center = GetComponentInChildren<Collider>().bounds.center;
         // Make the camera look at the object's center
-        m_camera.transform.LookAt(transform.position);
+        m_camera.transform.LookAt(center);
+
+        Time.timeScale = 0;
     }
 
     public void Examine()
@@ -75,13 +78,13 @@ public class Examinable : MonoBehaviour
         Vector3 deltaMousePosition = currentMousePosition - m_previousMousePosition;
         float rotationSpeed = 0.5f;
 
-        Vector3 position = GetComponentInChildren<Collider>().bounds.center;
+        Vector3 center = GetComponentInChildren<Collider>().bounds.center;
 
         // Rotate around the object's center on the Y-axis (up)
-        transform.RotateAround(position, Vector3.up, deltaMousePosition.x * rotationSpeed);
+        transform.RotateAround(center, Vector3.up, deltaMousePosition.x * rotationSpeed);
 
         // Rotate around the object's center on the X-axis (left)
-        transform.RotateAround(position, Vector3.left, deltaMousePosition.y * rotationSpeed);
+        transform.RotateAround(center, Vector3.left, deltaMousePosition.y * rotationSpeed);
 
         m_previousMousePosition = currentMousePosition;
     }
@@ -97,6 +100,8 @@ public class Examinable : MonoBehaviour
 
         m_descriptionText.text = string.Empty;
         m_backgroundImage.gameObject.SetActive(m_isExamining);
+
+        Time.timeScale = 1;
 
         transform.DOMove(m_originalPosition, m_animationDuration);
         transform.DOScale(m_originalScale, m_animationDuration);
