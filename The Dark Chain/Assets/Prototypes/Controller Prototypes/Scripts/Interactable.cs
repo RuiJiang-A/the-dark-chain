@@ -36,9 +36,8 @@ public class Interactable : MonoBehaviour
     {
         OnInteracted.AddListener(Interactable_OnInteracted);
 
-        if (m_tooltipPrefab == null) return;
-
-        hasTooltip = true;
+        hasTooltip = m_tooltipPrefab != null;
+        if (!hasTooltip) return;
 
         m_tooltip = Instantiate(m_tooltipPrefab, transform.position + m_offset, Quaternion.identity, m_canvas);
         m_tooltip.UpdateInfo(m_interactKey, m_prompt);
@@ -80,7 +79,7 @@ public class Interactable : MonoBehaviour
         if (!m_interacted && playerEntered)
         {
             m_testText.text = "Player Entered";
-            m_tooltip.Show();
+            if (hasTooltip) m_tooltip.Show();
             OnPlayerEnter?.Invoke();
         }
 
@@ -88,7 +87,7 @@ public class Interactable : MonoBehaviour
         if (m_interacted || !playerExited) return;
         m_testText.text = "Player Exited";
         // m_tooltip.gameObject.SetActive(false);
-        m_tooltip.Disable();
+        if (hasTooltip) m_tooltip.Disable();
         OnPlayerExit?.Invoke();
     }
 
@@ -109,6 +108,7 @@ public class Interactable : MonoBehaviour
     private void UpdateScreenPosition()
     {
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position + m_offset);
+        if (!hasTooltip) return;
         m_tooltip.gameObject.GetComponent<RectTransform>().position = screenPosition;
         m_tooltip.gameObject.SetActive(m_playerInRange);
     }
@@ -117,6 +117,7 @@ public class Interactable : MonoBehaviour
     {
         m_interacted = true;
         // m_tooltip.gameObject.SetActive(false);
+        if (!hasTooltip) return;
         m_tooltip.Disable();
     }
 
