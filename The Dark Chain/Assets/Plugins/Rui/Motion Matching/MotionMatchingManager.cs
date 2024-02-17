@@ -13,34 +13,39 @@ namespace Boopoo.MotionMatching
 
         [SerializeField] private Speed running = new();
 
-        DesiredData desired;
-        SimulatedData simulated;
+        private DesiredInfo desired;
+        private SimulatedInfo simulated;
+
+        private TrajectoryInfo trajectory;
+
+        // Search
+        private float searchTime = 0.1f;
+        private float searchTimer = 0.1f;
+        private float forceSearchTimer = 0.1f;
 
         [Header("References")] [SerializeField]
-        Rigidbody m_rigidbody;
+        private Rigidbody m_rigidbody = null;
 
-        [SerializeField] Transform m_camera;
-
-        [SerializeField] Transform character;
-        [SerializeField] GameObject debug;
+        [SerializeField] private Transform m_camera = null;
+        [SerializeField] private Transform character = null;
 
         [UsedImplicitly]
         private void Awake()
         {
-            desired = new DesiredData();
+            desired = new DesiredInfo();
             desired.Initialize();
 
-            simulated = new SimulatedData();
+            simulated = new SimulatedInfo();
             simulated.Initialize();
 
-#if !UNITY_EDITOR
-            if (debug != null) debug.SetActive(false);
-#endif
+            trajectory = new TrajectoryInfo(4);
         }
 
         [UsedImplicitly]
         private void Update()
         {
+            // Controller 
+
             float deltaTime = DeltaTime.Get(DELTA_TIME_MODE);
             float cameraAzimuth = InputManager.GetMainCameraAzimuth();
 
@@ -57,20 +62,29 @@ namespace Boopoo.MotionMatching
             desired.UpdateCurrentVelocity(input, cameraAzimuth, simulated.rotation, speed);
             desired.UpdateCurrentRotation(input, direction, cameraAzimuth);
 
-            // transform.position += desired.velocity * deltaTime;
-            // character.rotation = desired.rotation;
+            character.rotation = desired.currentRotation;
 
             desired.UpdateVelocityChange(deltaTime);
             desired.UpdateRotationChange(deltaTime);
 
-            Visualize();
+            // Search
+            bool forceSearch = ShouldForceSearch(deltaTime, desired);
+
+            // Prediction
+            PredictTrajectory();
+
+            bool endOfAnimation = false;
+
+            bool needSearch = forceSearch || searchTimer <= 0.0f || endOfAnimation;
+            if (needSearch) Search();
+
+            searchTimer -= deltaTime;
         }
 
+        [UsedImplicitly]
         private void FixedUpdate()
         {
             m_rigidbody.velocity = desired.velocity;
-            // m_rigidbody.rotation = desired.rotation;
-            character.rotation = desired.rotation;
         }
 
         private void CalculateSpeed(ref Speed speed)
@@ -80,10 +94,40 @@ namespace Boopoo.MotionMatching
             speed.backward = Mathf.Lerp(running.backward, walking.backward, desired.gait);
         }
 
-        private void Visualize()
+        private bool ShouldForceSearch(float deltaTime, DesiredInfo info)
         {
-#if UNITY_EDITOR
-#endif
+            float velocityChangeThreshold = info.velocityChangeThreshold;
+            float rotationChangeThreshold = info.rotationChangeThreshold;
+
+            if (forceSearchTimer <= 0.0f)
+            {
+                bool isVelocityChangeThresholdMet = info.previousVelocityChange.magnitude >= velocityChangeThreshold
+                                                    && info.currentVelocityChange.magnitude < velocityChangeThreshold;
+
+                bool isRotationChangeThresholdMet = info.previousRotationChange.magnitude >= rotationChangeThreshold
+                                                    && info.currentRotationChange.magnitude < rotationChangeThreshold;
+
+                if (isVelocityChangeThresholdMet || isRotationChangeThresholdMet) return true;
+            }
+            else if (forceSearchTimer > 0) forceSearchTimer -= deltaTime;
+
+            return false;
+        }
+
+
+        private void PredictTrajectory()
+        {
+            trajectory.PredictRotations();
+        }
+
+        private void Search()
+        {
+            OnSearch();
+            searchTimer = searchTime;
+        }
+
+        protected virtual void OnSearch()
+        {
         }
     }
 }

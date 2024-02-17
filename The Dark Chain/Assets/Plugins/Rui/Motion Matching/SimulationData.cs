@@ -1,11 +1,10 @@
-using Codice.CM.Common;
 using System;
 using UnityEngine;
 
 namespace Boopoo.MotionMatching
 {
     [Serializable]
-    public struct DesiredData
+    public struct DesiredInfo
     {
         public bool isStrafing;
 
@@ -68,12 +67,40 @@ namespace Boopoo.MotionMatching
 
         public void UpdateCurrentRotation(Vector3 input, Vector3 direction, float cameraAzimuth)
         {
-            // TODO: Calculate rotation
-            currentRotation = rotation;
+            (Quaternion rotation, bool isStrafing, Vector3 velocity) info = (rotation, isStrafing, velocity);
+            UpdateRotation(ref info, input, direction, cameraAzimuth);
+            currentRotation = info.rotation;
 
-            if (isStrafing)
+            // currentRotation = rotation;
+            //
+            // if (isStrafing)
+            // {
+            //     Vector3 directionBase = new Vector3(0, 0, -1);
+            //     Quaternion azimuthRotation = Quaternion.Euler(0, cameraAzimuth, 0);
+            //     Vector3 desiredDirection = azimuthRotation * directionBase;
+            //
+            //     if (direction.magnitude > 0.01f)
+            //         desiredDirection = azimuthRotation * Vector3.Normalize(direction);
+            //
+            //     float angle = Mathf.Atan2(desiredDirection.x, desiredDirection.z) * Mathf.Rad2Deg;
+            //     currentRotation = Quaternion.Euler(0, angle, 0);
+            // }
+            // else if (input.magnitude > 0.01f)
+            // {
+            //     Vector3 desiredDirection = Vector3.Normalize(velocity);
+            //     float angle = Mathf.Atan2(desiredDirection.x, desiredDirection.z) * Mathf.Rad2Deg;
+            //     currentRotation = Quaternion.Euler(0, angle, 0);
+            // }
+        }
+
+        public static void UpdateRotation(ref (Quaternion rotation, bool isStrafing, Vector3 velocity) info,
+            Vector3 input, Vector3 direction, float cameraAzimuth)
+        {
+            Quaternion updatedRotation = info.rotation;
+
+            if (info.isStrafing)
             {
-                Vector3 directionBase = new Vector3(0, 0, -1);
+                Vector3 directionBase = new(0, 0, -1);
                 Quaternion azimuthRotation = Quaternion.Euler(0, cameraAzimuth, 0);
                 Vector3 desiredDirection = azimuthRotation * directionBase;
 
@@ -81,14 +108,16 @@ namespace Boopoo.MotionMatching
                     desiredDirection = azimuthRotation * Vector3.Normalize(direction);
 
                 float angle = Mathf.Atan2(desiredDirection.x, desiredDirection.z) * Mathf.Rad2Deg;
-                currentRotation = Quaternion.Euler(0, angle, 0);
+                updatedRotation = Quaternion.Euler(0, angle, 0);
             }
             else if (input.magnitude > 0.01f)
             {
-                Vector3 desiredDirection = Vector3.Normalize(velocity);
+                Vector3 desiredDirection = Vector3.Normalize(info.velocity);
                 float angle = Mathf.Atan2(desiredDirection.x, desiredDirection.z) * Mathf.Rad2Deg;
-                currentRotation = Quaternion.Euler(0, angle, 0);
+                updatedRotation = Quaternion.Euler(0, angle, 0);
             }
+
+            info.rotation = updatedRotation;
         }
 
         public void UpdateVelocityChange(float deltaTime)
@@ -101,19 +130,19 @@ namespace Boopoo.MotionMatching
         public void UpdateRotationChange(float deltaTime)
         {
             previousRotationChange = currentRotationChange;
-            // TODO: Calculate rotation change rate
 
             Quaternion difference = Quaternion.Inverse(rotation) * currentRotation;
             difference = difference.normalized;
 
-            // currentRotationChange = difference / deltaTime;
+            difference.ToAngleAxis(out float angle, out Vector3 axis);
+            currentRotationChange = (angle / deltaTime) * axis;
 
             rotation = currentRotation;
         }
     }
 
     [Serializable]
-    public struct SimulatedData
+    public struct SimulatedInfo
     {
         public Vector3 position;
         public Vector3 velocity;
