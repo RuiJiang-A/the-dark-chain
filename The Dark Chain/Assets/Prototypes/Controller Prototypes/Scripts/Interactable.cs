@@ -1,6 +1,8 @@
+using Boopoo.Telemetry;
 using JetBrains.Annotations;
-using UnityEngine;
+using System;
 using TMPro;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class Interactable : MonoBehaviour
@@ -15,6 +17,7 @@ public class Interactable : MonoBehaviour
     /// </summary>
     [SerializeField] private Vector3 m_offset = Vector3.zero;
 
+    [SerializeField] private bool _reinteracted = false;
     private bool m_interacted;
 
     private bool m_playerInRange;
@@ -102,7 +105,7 @@ public class Interactable : MonoBehaviour
         if (!Input.GetKeyDown(m_interactKey) || m_interacted) return;
         m_testText.text = "Interacted";
         OnInteracted?.Invoke();
-        m_interacted = true;
+        // m_interacted = true;
     }
 
     private void UpdateScreenPosition()
@@ -113,9 +116,22 @@ public class Interactable : MonoBehaviour
         m_tooltip.gameObject.SetActive(m_playerInRange);
     }
 
+    [Serializable]
+    public struct InteractEventData
+    {
+        public string objectName;
+
+        public InteractEventData(string objectName)
+        {
+            this.objectName = objectName;
+        }
+    }
+
     private void Interactable_OnInteracted()
     {
-        m_interacted = true;
+        m_interacted = !_reinteracted;
+        TelemetryLogger.Log(this, "Interact With",
+            new InteractEventData(gameObject.name));
         // m_tooltip.gameObject.SetActive(false);
         if (!hasTooltip) return;
         m_tooltip.Disable();

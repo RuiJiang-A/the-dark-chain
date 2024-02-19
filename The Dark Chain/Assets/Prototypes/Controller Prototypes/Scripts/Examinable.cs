@@ -1,22 +1,20 @@
 using DG.Tweening;
 using JetBrains.Annotations;
-using TMPro;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Examinable : MonoBehaviour
 {
     [SerializeField] private Canvas m_examinationCanvas = null;
-    [SerializeField] private Camera m_camera = null;
+
+    // [SerializeField] private Camera m_camera = null;
     [SerializeField] private int m_examinationLayer = 7;
 
-    [SerializeField] private Image m_backgroundImage = null;
+    // [SerializeField] private Image m_backgroundImage = null;
 
-    [SerializeField] private TextMeshProUGUI m_descriptionText = null;
-    [SerializeField] private string m_description = string.Empty;
+    // [SerializeField] private TextMeshProUGUI m_descriptionText = null;
+    // [SerializeField] private string m_description = string.Empty;
     [SerializeField] private Vector3 m_scale = Vector3.one;
-    [SerializeField] private Vector3 m_offset = new(0, 0, -5);
+    // [SerializeField] private Vector3 m_offset = new(0, 0, -5);
 
     [SerializeField] private KeyCode m_exitKey = KeyCode.Escape;
     private bool m_isExamining;
@@ -36,7 +34,7 @@ public class Examinable : MonoBehaviour
     {
         if (!m_isExamining) return;
         if (Input.GetKeyDown(m_exitKey)) StopExamination();
-        Examine();
+        // Examine();
     }
 
     [UsedImplicitly]
@@ -55,24 +53,24 @@ public class Examinable : MonoBehaviour
         ChangeToExaminationLayer();
 
         m_examinationCanvas.gameObject.SetActive(m_isExamining);
-        m_backgroundImage.gameObject.SetActive(m_isExamining);
+        // m_backgroundImage.gameObject.SetActive(m_isExamining);
 
-        m_descriptionText.text = m_description;
+        // m_descriptionText.text = m_description;
 
         transform.DOScale(m_scale, m_animationDuration);
 
         // Position the camera at an offset relative to the object's center
-        Vector3 cameraPosition = transform.position + m_offset;
-        m_camera.transform.position = cameraPosition;
+        // Vector3 cameraPosition = transform.position + m_offset;
+        // m_camera.transform.position = cameraPosition;
 
-        Vector3 center = GetComponentInChildren<Collider>().bounds.center;
+        // Vector3 center = GetComponentInChildren<Collider>().bounds.center;
         // Make the camera look at the object's center
-        m_camera.transform.LookAt(center);
+        // m_camera.transform.LookAt(center);
 
         Time.timeScale = 0;
     }
 
-    public void Examine()
+    private void Examine()
     {
         Vector3 currentMousePosition = Input.mousePosition;
         Vector3 deltaMousePosition = currentMousePosition - m_previousMousePosition;
@@ -98,8 +96,8 @@ public class Examinable : MonoBehaviour
 
         ChangeToOriginalLayer();
 
-        m_descriptionText.text = string.Empty;
-        m_backgroundImage.gameObject.SetActive(m_isExamining);
+        // m_descriptionText.text = string.Empty;
+        // m_backgroundImage.gameObject.SetActive(m_isExamining);
 
         Time.timeScale = 1;
 
