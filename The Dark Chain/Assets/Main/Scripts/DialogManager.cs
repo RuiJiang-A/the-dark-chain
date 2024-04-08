@@ -16,12 +16,14 @@ public class DialogManager : MonoBehaviour
     int _temp_clue_index = 0;
     bool _temp_first_time_see_clue = true;
 
+    [SerializeField] private string[] _dialogs = null;
+
     [SerializeField] float _lastHintTime;
 
     [UsedImplicitly]
     public void DisplayDialog(string dialogText)
     {
-        DisplayDialog(dialogText, 1);
+        DisplayDialog(dialogText, 3);
     }
 
     [UsedImplicitly]
@@ -46,6 +48,12 @@ public class DialogManager : MonoBehaviour
     }
 
     [UsedImplicitly]
+    public void ShowTheDialog(int index)
+    {
+        DisplayDialog(_dialogs[index], 3);
+    }
+
+    [UsedImplicitly]
     public void ShowSafe()
     {
         if (Time.time - _lastHintTime < 5.0f && !_temp_first_time_see_safe) return;
@@ -53,7 +61,6 @@ public class DialogManager : MonoBehaviour
         DisplayDialog(_temp_safe[index]);
         _lastHintTime = Time.time;
         _temp_first_time_see_safe = false;
-        Debug.Log("Do Safe");
     }
 
     [System.Serializable]
@@ -67,7 +74,6 @@ public class DialogManager : MonoBehaviour
     [UsedImplicitly]
     public void ShowClue()
     {
-        Debug.Log("Show Clue");
         if (Time.time - _lastHintTime < 5.0f && !_temp_first_time_see_clue) return;
         int index = _temp_clue_index;
         DisplayDialog(_temp_clue[index], 5);
