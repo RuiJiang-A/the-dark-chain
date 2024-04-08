@@ -808,7 +808,9 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Standalone: AMPLIFY_SHADER_EDITOR;SHAPES_HDRP
+    Android: CROSS_PLATFORM_INPUT
+    Standalone: AMPLIFY_SHADER_EDITOR;SHAPES_HDRP;CROSS_PLATFORM_INPUT
+    iPhone: CROSS_PLATFORM_INPUT
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
